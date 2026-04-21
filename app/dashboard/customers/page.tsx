@@ -1,16 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { customers, formatCurrency } from "@/app/data/mockData";
+import { customers as initialCustomers, formatCurrency, Customer } from "@/app/data/mockData";
 import "../../styles/dashboard.css";
 
 export default function CustomersPage() {
+  const [customersList, setCustomersList] = useState<Customer[]>(initialCustomers);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 6;
 
-  const filtered = customers.filter(c =>
+  // New Customer Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    status: "Active" as "Active" | "Inactive",
+  });
+
+  const filtered = customersList.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.phone.includes(search)
   );
@@ -19,8 +30,8 @@ export default function CustomersPage() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentCustomers = filtered.slice(startIndex, startIndex + itemsPerPage);
 
-  const totalOutstanding = customers.reduce((sum, c) => sum + c.outstandingBalance, 0);
-  const activeCount = customers.filter(c => c.status === "Active").length;
+  const totalOutstanding = customersList.reduce((sum, c) => sum + c.outstandingBalance, 0);
+  const activeCount = customersList.filter(c => c.status === "Active").length;
 
   const getStatusClass = (status: string) => {
     switch (status) {
@@ -31,6 +42,30 @@ export default function CustomersPage() {
     }
   };
 
+  const handleAddCustomer = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone) return;
+
+    const newCustomer: Customer = {
+      id: customersList.length + 1,
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      address: formData.address,
+      totalOrders: 0,
+      totalSpent: 0,
+      outstandingBalance: 0,
+      recentPayment: 0,
+      recentPaymentDate: "-",
+      status: formData.status,
+      joinedDate: new Date().toISOString().split('T')[0],
+    };
+
+    setCustomersList([newCustomer, ...customersList]);
+    setIsModalOpen(false);
+    setFormData({ name: "", phone: "", email: "", address: "", status: "Active" });
+  };
+
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
       {/* Page Header */}
@@ -39,27 +74,29 @@ export default function CustomersPage() {
           <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--db-text)" }}>Customers</h1>
           <p style={{ color: "var(--db-text-muted)", fontSize: "0.85rem", marginTop: "0.125rem" }}>Manage your customer accounts and outstanding balances</p>
         </div>
-        <button style={{
-          padding: "0.625rem 1.5rem",
-          background: "var(--db-primary)",
-          color: "white",
-          borderRadius: "0.625rem",
-          border: "none",
-          fontSize: "0.85rem",
-          fontWeight: 700,
-          cursor: "pointer",
-          boxShadow: "0 4px 12px rgba(79, 70, 229, 0.25)",
-        }}>
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          style={{
+            padding: "0.625rem 1.5rem",
+            background: "var(--db-primary)",
+            color: "white",
+            borderRadius: "0.625rem",
+            border: "none",
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 4px 12px rgba(79, 70, 229, 0.25)",
+          }}>
           + Add Customer
         </button>
       </div>
 
       {/* Summary Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
-        <SummaryCard label="Total Customers" value={customers.length.toString()} color="#4f46e5" />
+        <SummaryCard label="Total Customers" value={customersList.length.toString()} color="#4f46e5" />
         <SummaryCard label="Active" value={activeCount.toString()} color="#16a34a" />
         <SummaryCard label="Total Outstanding" value={formatCurrency(totalOutstanding)} color="#ef4444" />
-        <SummaryCard label="Avg. Spend" value={formatCurrency(Math.round(customers.reduce((s, c) => s + c.totalSpent, 0) / customers.length))} color="#f59e0b" />
+        <SummaryCard label="Avg. Spend" value={formatCurrency(Math.round(customersList.reduce((s, c) => s + c.totalSpent, 0) / customersList.length))} color="#f59e0b" />
       </div>
 
       {/* Search */}
@@ -108,7 +145,9 @@ export default function CustomersPage() {
                       display: "flex", alignItems: "center", justifyContent: "center",
                       color: "white", fontSize: "0.7rem", fontWeight: 700, flexShrink: 0,
                     }}>
-                      {customer.name.split(" ").map(n => n[0]).join("")}
+                      {customer.name && customer.name.includes(" ") 
+                        ? customer.name.split(" ").map(n => n[0]).join("").substring(0, 2)
+                        : customer.name ? customer.name.substring(0, 1) : "?"}
                     </div>
                     <div>
                       <p style={{ fontWeight: 600, fontSize: "0.875rem" }}>{customer.name}</p>
@@ -172,6 +211,85 @@ export default function CustomersPage() {
           <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="pagination-btn">Next</button>
         </div>
       </div>
+
+      {/* Add Customer Modal */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ padding: "2rem", maxWidth: "600px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+              <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--db-text)" }}>Add New Customer</h2>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                style={{ background: "transparent", border: "none", color: "var(--db-text-muted)", cursor: "pointer", fontSize: "1.5rem" }}>
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleAddCustomer}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "var(--db-text-muted)", marginBottom: "0.5rem", textTransform: "uppercase" }}>Full Name</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.5rem", border: "1px solid var(--db-border)", background: "var(--db-card-bg)", color: "var(--db-text)" }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "var(--db-text-muted)", marginBottom: "0.5rem", textTransform: "uppercase" }}>Phone Number</label>
+                  <input
+                    required
+                    type="tel"
+                    placeholder="+91 00000 00000"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.5rem", border: "1px solid var(--db-border)", background: "var(--db-card-bg)", color: "var(--db-text)" }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "1rem" }}>
+                <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "var(--db-text-muted)", marginBottom: "0.5rem", textTransform: "uppercase" }}>Email Address</label>
+                <input
+                  type="email"
+                  placeholder="john@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  style={{ width: "100%", padding: "0.75rem", borderRadius: "0.5rem", border: "1px solid var(--db-border)", background: "var(--db-card-bg)", color: "var(--db-text)" }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "var(--db-text-muted)", marginBottom: "0.5rem", textTransform: "uppercase" }}>Status</label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as "Active" | "Inactive" })}
+                  style={{ width: "100%", padding: "0.75rem", borderRadius: "0.5rem", border: "1px solid var(--db-border)", background: "var(--db-card-bg)", color: "var(--db-text)" }}>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+
+              <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "2rem" }}>
+                <button 
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  style={{ padding: "0.75rem 1.5rem", borderRadius: "0.5rem", border: "1px solid var(--db-border)", background: "transparent", color: "var(--db-text)", fontWeight: 600, cursor: "pointer" }}>
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  style={{ padding: "0.75rem 1.5rem", borderRadius: "0.5rem", background: "var(--db-primary)", color: "white", fontWeight: 700, border: "none", cursor: "pointer", boxShadow: "0 4px 12px rgba(79, 70, 229, 0.25)" }}>
+                  Create Customer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

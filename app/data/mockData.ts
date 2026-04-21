@@ -124,8 +124,22 @@ export const orders: Order[] = [
 ];
 
 export const sales: Sale[] = [
+  // This Week (April 19 - 25, 2026)
   { id: 501, orderId: 103, customerName: "Priya Sharma", date: "2026-04-20", amount: 1800, paymentMethod: "UPI" },
   { id: 502, orderId: 99, customerName: "Ravi Verma", date: "2026-04-21", amount: 8000, paymentMethod: "Cash" },
+  // Last Week (April 12 - 18, 2026)
+  { id: 503, orderId: 110, customerName: "Rajesh Kumar", date: "2026-04-15", amount: 4500, paymentMethod: "Card" },
+  { id: 504, orderId: 111, customerName: "Deepa Nair", date: "2026-04-13", amount: 2200, paymentMethod: "UPI" },
+  // Earlier in April
+  { id: 505, orderId: 112, customerName: "Vikram Singh", date: "2026-04-05", amount: 12000, paymentMethod: "Cash" },
+  // March 2026
+  { id: 506, orderId: 113, customerName: "Amit Patel", date: "2026-03-25", amount: 5600, paymentMethod: "UPI" },
+  { id: 507, orderId: 114, customerName: "Sunita Devi", date: "2026-03-10", amount: 9800, paymentMethod: "Card" },
+  // February 2026
+  { id: 508, orderId: 115, customerName: "Rajesh Kumar", date: "2026-02-15", amount: 15600, paymentMethod: "Cash" },
+  // 2025
+  { id: 509, orderId: 116, customerName: "Priya Sharma", date: "2025-12-20", amount: 25000, paymentMethod: "Card" },
+  { id: 510, orderId: 117, customerName: "Mohammed Ali", date: "2025-11-05", amount: 18500, paymentMethod: "UPI" },
 ];
 
 export interface Supplier {
@@ -188,3 +202,20 @@ export const getOrderById = (id: number) => orders.find(o => o.id === id);
 export const formatCurrency = (amount: number): string => {
   return "₹" + amount.toLocaleString("en-IN");
 };
+
+export const currentUser = {
+  name: "MD Eesha",
+  role: "Store Manager",
+  email: "eesha@zarooratkart.com",
+  joined: "2024-02-15",
+  avatar: "ME",
+  phone: "+91 99887 76655"
+};
+
+export const notifications = [
+  { id: 1, title: "New Order", message: "Rajesh Kumar placed a new order for ₹3,200", time: "2 mins ago", type: "order" },
+  { id: 2, title: "Stock Alert", message: "Low stock alert: Organic Sunflower Oil (12L left)", time: "1 hour ago", type: "stock" },
+  { id: 3, title: "Payment Received", message: "Successfully received ₹8,000 from Ravi Verma", time: "3 hours ago", type: "payment" },
+  { id: 4, title: "New Customer", message: "Neha Gupta joined the ZarooratKart platform", time: "5 hours ago", type: "user" },
+  { id: 5, title: "Report Ready", message: "Monthly Sales Report for March 2026 is ready", time: "1 day ago", type: "report" },
+];
