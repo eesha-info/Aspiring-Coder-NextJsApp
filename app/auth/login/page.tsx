@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import "../../styles/auth.css";
 
 const Login = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -40,7 +42,8 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Login Data:", formData);
-      // Proceed with login logic
+      // Simulate successful login and redirect
+      router.push("/dashboard");
     }
   };
 
