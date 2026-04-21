@@ -8,7 +8,7 @@ import "../../styles/auth.css";
 const Login = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -30,8 +30,7 @@ const Login = () => {
 
   const validateForm = () => {
     let newErrors: any = {};
-    if (!formData.email.trim()) newErrors.email = "Email is required!";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid!";
+    if (!formData.username.trim()) newErrors.username = "Username is required!";
     if (!formData.password.trim()) newErrors.password = "Password is required!";
     
     setErrors(newErrors);
@@ -66,25 +65,26 @@ const Login = () => {
             <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "white", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 25px rgba(0,0,0,0.15)", overflow: "hidden", border: "4px solid #fff", marginBottom: "0.75rem" }}>
               <img src="/brand.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
-            <h1 className="brand">ZarooratKart</h1>
+            <h1 className="brand">Store Login</h1>
+            <p style={{ color: "#a3e635", fontSize: "0.9rem", fontWeight: "600", marginTop: "-5px" }}>Store Manager Access</p>
           </div>
 
           <p className="tagline">
-            Your Premium Grocery & Store Management Platform.
+            Manage your ZarooratKart inventory and sales with ease.
           </p>
 
           <form onSubmit={handleSubmit}>
             <div className="input-group">
-              <label>Email</label>
+              <label>Username</label>
               <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                className={errors.email ? "error-input" : ""}
-                value={formData.email}
+                type="text"
+                name="username"
+                placeholder="Enter store manager username"
+                className={errors.username ? "error-input" : ""}
+                value={formData.username}
                 onChange={handleChange}
               />
-              {errors.email && <p className="error-message">{errors.email}</p>}
+              {errors.username && <p className="error-message">{errors.username}</p>}
             </div>
 
             <div className="input-group">
@@ -101,14 +101,9 @@ const Login = () => {
             </div>
 
             <button type="submit" className="auth-btn">
-              Login
+              Login to Store
             </button>
           </form>
-
-          <p className="footer-text">
-            Don’t have an account?{" "}
-            <Link href="/auth/signup">Sign up</Link>
-          </p>
         </div>
       </div>
     </>

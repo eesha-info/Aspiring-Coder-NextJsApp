@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aspiring Coder",
-  description: "aspiring-coder-app",
+  title: "ZarooratKart",
+  description: "Your Premium Grocery & Store Management Platform.",
 };
 
 export default function RootLayout({

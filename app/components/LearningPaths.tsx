@@ -3,13 +3,13 @@ import styles from "@/app/page.module.css";
 export default function LearningPaths() {
   return (
     <section className={styles.paths}>
-      <h2>Explore Learning Paths</h2>
+      <h2>Shop by Category</h2>
 
       <div className={styles.pathGrid}>
-        <div className={styles.pathCard}>Frontend Development</div>
-        <div className={styles.pathCard}>Backend Development</div>
-        <div className={styles.pathCard}>Full Stack Development</div>
-        <div className={styles.pathCard}>Data Structures & Algorithms</div>
+        <div className={styles.pathCard}>Grains & Pulses</div>
+        <div className={styles.pathCard}>Dairy & Eggs</div>
+        <div className={styles.pathCard}>Fresh Produce</div>
+        <div className={styles.pathCard}>Household Essentials</div>
       </div>
     </section>
   );

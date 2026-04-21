@@ -7,18 +7,18 @@ export default function Features() {
 
       <div className={styles.featureGrid}>
         <div className={styles.card}>
-          <h3>💻 Real Coding Practice</h3>
-          <p>Hands-on coding challenges to build real skills.</p>
+          <h3>🍎 Fresh Produce</h3>
+          <p>Real-time tracking of fresh vegetables and fruits.</p>
         </div>
 
         <div className={styles.card}>
-          <h3>📚 Structured Learning</h3>
-          <p>Step-by-step roadmap from beginner to expert.</p>
+          <h3>📦 Smart Inventory</h3>
+          <p>Automated alerts for low stock on daily essentials.</p>
         </div>
 
         <div className={styles.card}>
-          <h3>🚀 Projects</h3>
-          <p>Build real-world apps to strengthen your portfolio.</p>
+          <h3>📊 Analytics</h3>
+          <p>Detailed sales reports for better management.</p>
         </div>
       </div>
     </section>

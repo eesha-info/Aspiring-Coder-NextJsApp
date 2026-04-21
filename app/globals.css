@@ -20,8 +20,11 @@ body {
    ROOT VARIABLES
 ========================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #022c22;
+  --foreground: #ecfdf5;
+  --accent-lime: #a3e635;
+  --accent-emerald: #10b981;
+  --accent-forest: #064e3b;
 }
 
 /* Tailwind theme mapping */
@@ -37,8 +40,8 @@ body {
 ========================= */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #011611;
+    --foreground: #f0fdf4;
   }
 }
 

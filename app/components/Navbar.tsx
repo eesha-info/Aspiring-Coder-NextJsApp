@@ -12,11 +12,8 @@ export default function Navbar() {
       </Link>
 
       <div className={styles.navLinks}>
-        <Link href="/auth/login" className={styles.link}>
+        <Link href="/auth/login" className={styles.signupBtn}>
           Login
-        </Link>
-        <Link href="/auth/signup" className={styles.signupBtn}>
-          Sign Up
         </Link>
       </div>
     </nav>
