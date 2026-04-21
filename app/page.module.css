@@ -3,243 +3,563 @@
 ========================= */
 .container {
   min-height: 100vh;
-  color: white;
-
-  background: radial-gradient(
-      circle at top left,
-      rgba(163, 230, 53, 0.15),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(16, 185, 129, 0.1),
-      transparent 45%
-    ),
-    linear-gradient(180deg, #022c22, #011611);
+  color: var(--foreground);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  scroll-padding-top: 80px; /* Accounts for fixed navbar */
 }
 
 /* =========================
-   NAVBAR
+   NAVBAR (REDUCED)
 ========================= */
 .navbar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 10;
-
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding: 15px 60px;
-
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(163, 230, 53, 0.1);
+  padding: 12px 60px;
+  background: rgba(255, 255, 255, 0.95); /* More opaque to prevent overlap confusion */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.logo {
-  font-size: 22px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-/* Nav Links */
-.navLinks {
+.miniLogo {
   display: flex;
   align-items: center;
-  gap: 20px;
-}
-
-.link {
-  color: #ddd;
+  gap: 10px;
   text-decoration: none;
   transition: 0.3s;
 }
 
-.link:hover {
-  color: #fff;
+.miniLogo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  padding: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.signupBtn {
-  background: linear-gradient(135deg, #a3e635, #10b981);
-  padding: 8px 16px;
-  border-radius: 8px;
-  color: #022c22;
+.miniLogo span {
+  font-weight: 800;
+  color: var(--brand-green);
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.miniLogo:hover {
+  transform: scale(1.05);
+}
+
+.menuLinks {
+  display: flex;
+  gap: 40px;
+}
+
+.navLink {
+  color: #333;
+  text-decoration: none;
   font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: relative;
+  padding: 5px 0;
+  transition: color 0.3s ease;
 }
 
-.signupBtn:hover {
+.navLink::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--brand-green);
+  transition: width 0.3s ease;
+}
+
+.navLink:hover {
+  color: var(--brand-green);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.loginBtn {
+  background: var(--brand-green);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.loginBtn:hover {
+  background: white;
+  color: var(--brand-green);
+  border-color: var(--brand-green);
+  box-shadow: 0 10px 20px rgba(44, 110, 73, 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* =========================
-   HERO SECTION
+   HERO / MAIN CONTENT
 ========================= */
 .hero {
-  height: 85vh;
-
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-
+  justify-content: center;
+  padding: 80px 20px 40px;
   text-align: center;
-
-  max-width: 800px;
-  margin: auto;
-
-  padding: 0 20px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1974');
+  background-size: cover;
+  background-position: center;
 }
 
-.hero h1 {
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.hero span {
-  background: linear-gradient(90deg, #a3e635, #10b981);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero p {
-  margin-top: 20px;
-  font-size: 17px;
-  opacity: 0.85;
-  line-height: 1.6;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-.buttons {
-  margin-top: 30px;
+.mainLogo {
   display: flex;
+  align-items: center;
   gap: 15px;
+  margin-bottom: 5px;
 }
 
-.primaryBtn {
-  background: linear-gradient(135deg, #a3e635, #10b981);
-  padding: 14px 24px;
-  border-radius: 10px;
+.mainLogo img {
+  width: 60px;
+  height: 60px;
+}
 
-  text-decoration: none;
-  color: #022c22;
+.brandName {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--brand-green);
+  letter-spacing: -1px;
+}
+
+.brandName span {
+  color: var(--brand-orange);
+}
+
+.tagline {
+  font-size: 22px;
   font-weight: 600;
-
-  transition: 0.3s;
-}
-
-.primaryBtn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-}
-
-.secondaryBtn {
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 14px 24px;
-  border-radius: 10px;
-
-  text-decoration: none;
-  color: white;
-
-  transition: 0.3s;
-}
-
-.secondaryBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  color: #333;
+  margin-bottom: 40px;
 }
 
 /* =========================
-   SECTIONS
-========================= */
-.features,
-.paths,
-.why,
-.cta {
-  position: relative;
-  z-index: 5;
-
-  padding: 80px 20px;
-  text-align: center;
-}
-
-/* =========================
-   FEATURE CARDS
+   FEATURE GRID (4 Items)
 ========================= */
 .featureGrid {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   justify-content: center;
-  flex-wrap: wrap;
-
-  margin-top: 30px;
+  margin-bottom: 50px;
+  width: 100%;
+  max-width: 900px;
 }
 
-.card {
-  width: 250px;
+.featureItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
 
+.iconCircle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--brand-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-green);
+  font-size: 24px;
+}
+
+.featureTitle {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.featureSub {
+  font-size: 12px;
+  color: #666;
+}
+
+/* =========================
+   DELIVERY BAR
+========================= */
+.deliveryBar {
+  background: #f8faf8;
+  border: 1px solid #e0e0e0;
+  padding: 15px 40px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.deliveryBar span {
+  color: var(--brand-green);
+}
+
+/* =========================
+   CATEGORY GRID (5 Items)
+========================= */
+.categoryGrid {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
   padding: 20px;
-  border-radius: 12px;
+}
 
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
 
-  backdrop-filter: blur(10px);
+.catIcon {
+  font-size: 30px;
+  color: #444;
+}
 
+.catName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* =========================
+   ABOUT SECTION
+========================= */
+.aboutSection {
+  padding: 100px 20px;
+  background: white;
+  display: flex;
+  justify-content: center;
+}
+
+.aboutContent {
+  max-width: 1000px;
+  text-align: center;
+}
+
+.aboutContent h2 {
+  font-size: 36px;
+  color: var(--brand-green);
+  margin-bottom: 20px;
+}
+
+.aboutContent p {
+  font-size: 18px;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto 50px;
+}
+
+.aboutGrid {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.aboutCard {
+  background: #fdfdfd;
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid #eee;
+  flex: 1;
   transition: 0.3s;
 }
 
-.card:hover {
-  transform: translateY(-5px);
+.aboutCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* =========================
-   PATHS
-========================= */
-.pathGrid {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  margin-top: 30px;
-}
-
-.pathCard {
-  padding: 15px 25px;
-  border-radius: 8px;
-
-  background: linear-gradient(135deg, #a3e635, #10b981);
-  color: #022c22;
-
-  font-weight: 600;
-}
-
-/* =========================
-   WHY SECTION
-========================= */
-.why p {
-  max-width: 600px;
-  margin: auto;
-  margin-top: 15px;
-  opacity: 0.85;
-}
-
-/* =========================
-   CTA
-========================= */
-.cta {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.cta h2 {
+.aboutIcon {
+  font-size: 40px;
   margin-bottom: 20px;
+  display: block;
+}
+
+.aboutCard h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* =========================
+   STATS SECTION
+========================= */
+.statsSection {
+  background: var(--brand-green);
+  padding: 60px 20px;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+  text-align: center;
+}
+
+.statBox h3 {
+  font-size: 42px;
+  margin-bottom: 5px;
+}
+
+.statBox p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* =========================
+   DELIVERY LIVE SECTION (GOOGLE MAPS STYLE)
+========================= */
+.deliverySection {
+  padding: 120px 60px; /* Increased top padding */
+  background: #fdfdfd;
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  position: relative;
+}
+
+.deliveryInfo {
+  flex: 0.8;
+}
+
+.deliveryInfo h2 {
+  font-size: 42px;
+  color: var(--brand-green);
+  margin-bottom: 25px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.deliveryInfo p {
+  font-size: 19px;
+  color: #555;
+  margin-bottom: 35px;
+  line-height: 1.6;
+}
+
+.mapContainer {
+  flex: 1.2;
+  height: 480px;
+  background-color: #f1f3f4; /* Google Maps light gray background */
+  /* CSS-generated street grid */
+  background-image: 
+    linear-gradient(90deg, #ffffff 2px, transparent 2px),
+    linear-gradient(#ffffff 2px, transparent 2px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
+  background-position: center;
+  border-radius: 28px;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.1);
+  overflow: visible;
+  border: 4px solid white;
+}
+
+.mapOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent, rgba(255,255,255,0.4));
+  pointer-events: none;
+}
+
+/* Google Maps UI Overlays */
+.searchBar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: white;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  width: 280px;
+  z-index: 100;
+  border: 1px solid #e0e0e0;
+}
+
+.mapControls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+
+.controlBtn {
+  background: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #5f6368;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+  transition: 0.2s;
+}
+
+.controlBtn:hover {
+  background: #f8f9fa;
+  transform: scale(1.05);
+}
+
+/* Map Pins */
+.landmark {
+  position: absolute;
+  z-index: 50;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+.pinIcon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+/* Route Styling */
+.routePath {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.pathLine {
+  stroke: #4285F4; /* Google Maps Navigation Blue */
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0 0 4px rgba(66, 133, 244, 0.4));
+}
+
+.scooter {
+  position: absolute;
+  z-index: 80;
+  offset-path: path("M 100 80 Q 200 50 300 150 T 500 280");
+  offset-rotate: 0deg; /* Keep scooter upright */
+  animation: deliver 10s infinite linear;
+  background: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  border: 2px solid #4285F4;
+}
+
+@keyframes deliver {
+  0% { offset-distance: 0%; transform: scaleX(1); }
+  45% { transform: scaleX(1); }
+  50% { offset-distance: 100%; transform: scaleX(-1); }
+  95% { transform: scaleX(-1); }
+  100% { offset-distance: 0%; transform: scaleX(1); }
+}
+
+/* APP SECTION */
+.appSection {
+  padding: 100px 60px;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  background: #fff;
+}
+
+.appContent {
+  flex: 1;
+}
+
+.appContent h2 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.appContent p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.appButtons {
+  display: flex;
+  gap: 20px;
+}
+
+.appBtn {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.appBtn:hover {
+  background: black;
+}
+
+.appImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.phoneMock {
+  font-size: 120px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
 }
 
 /* =========================
@@ -248,7 +568,15 @@
 .footer {
   padding: 20px;
   text-align: center;
+  font-size: 12px;
+  color: #888;
+  background: white;
+  border-top: 1px solid #eee;
+}
 
-  font-size: 14px;
-  opacity: 0.7;
+@media (max-width: 768px) {
+  .featureGrid, .categoryGrid {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
 }

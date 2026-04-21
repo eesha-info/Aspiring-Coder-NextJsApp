@@ -4,18 +4,19 @@ import styles from "@/app/page.module.css";
 export default function Navbar() {
   return (
     <nav className={styles.navbar}>
-      <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
-        <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "white", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", overflow: "hidden", border: "2px solid var(--db-primary)" }}>
-          <img src="/brand.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        </div>
-        <h2 className={styles.logo} style={{ margin: 0 }}>ZarooratKart</h2>
+      <Link href="/" className={styles.miniLogo}>
+         <img src="/brand.png" alt="Logo" />
+         <span>ZarooratKart</span>
       </Link>
-
-      <div className={styles.navLinks}>
-        <Link href="/auth/login" className={styles.signupBtn}>
-          Login
-        </Link>
+      <div className={styles.menuLinks}>
+        <Link href="/" className={styles.navLink}>Home</Link>
+        <Link href="#categories" className={styles.navLink}>Shop</Link>
+        <Link href="#about" className={styles.navLink}>About</Link>
+        <Link href="#contact" className={styles.navLink}>Contact</Link>
       </div>
+      <Link href="/auth/login" className={styles.loginBtn}>
+        Login
+      </Link>
     </nav>
   );
 }

@@ -20,10 +20,11 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
     // Clear error when user starts typing
-    if (errors[e.target.name]) {
+    if (errors[e.target.name] || errors.auth) {
       setErrors({
         ...errors,
         [e.target.name]: "",
+        auth: "",
       });
     }
   };
@@ -40,9 +41,14 @@ const Login = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Login Data:", formData);
-      // Simulate successful login and redirect
-      router.push("/dashboard");
+      if (formData.username === "eesha" && formData.password === "eesha@123") {
+        router.push("/dashboard");
+      } else {
+        setErrors({
+          ...errors,
+          auth: "Invalid username or password!"
+        });
+      }
     }
   };
 
@@ -99,6 +105,12 @@ const Login = () => {
               />
               {errors.password && <p className="error-message">{errors.password}</p>}
             </div>
+
+            {errors.auth && (
+              <p className="error-message" style={{ textAlign: "center", marginBottom: "1rem", background: "rgba(239, 68, 68, 0.1)", padding: "10px", borderRadius: "6px" }}>
+                {errors.auth}
+              </p>
+            )}
 
             <button type="submit" className="auth-btn">
               Login to Store
