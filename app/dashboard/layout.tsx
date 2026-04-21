@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { notifications, currentUser } from "@/app/data/mockData";
 import "../styles/dashboard.css";
 
 export default function DashboardLayout({
@@ -14,6 +15,20 @@ export default function DashboardLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  // Close notifications when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setNotificationsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className={`dashboard-root ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -27,13 +42,10 @@ export default function DashboardLayout({
         {/* Brand */}
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <div className="sidebar-logo-icon">
-              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-                <path d="M16 4L28 28H4L16 4Z" fill="#4F46E5" />
-                <path d="M16 10L22 24H10L16 10Z" fill="#818CF8" />
-              </svg>
+            <div className="sidebar-logo-icon" style={{ width: "32px", height: "32px", borderRadius: "50%", background: "white", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.15)", overflow: "hidden", border: "2px solid var(--db-primary)" }}>
+              <img src="/brand.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
-            {!collapsed && <span className="sidebar-logo-text">StoreFlow</span>}
+            {!collapsed && <span className="sidebar-logo-text">ZarooratKart</span>}
           </div>
           <button className="sidebar-toggle" onClick={() => setCollapsed(!collapsed)}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -235,21 +247,78 @@ export default function DashboardLayout({
           </div>
 
           <div className="header-actions">
-            <button className="header-icon-btn">
-              <span className="header-notification-dot" />
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-            </button>
-            <div className="header-divider" />
-            <div className="header-user">
-              <div className="header-user-info">
-                <span className="header-user-name">MD Eesha</span>
-                <Link href="/" className="header-user-logout">Log Out</Link>
-              </div>
-              <div className="header-user-avatar">ME</div>
+            <div style={{ position: "relative" }} ref={notificationRef}>
+              <button 
+                className={`header-icon-btn ${notificationsOpen ? "header-icon-btn-active" : ""}`}
+                onClick={() => setNotificationsOpen(!notificationsOpen)}
+              >
+                <div style={{ 
+                  position: "absolute", top: "4px", right: "4px", 
+                  width: "16px", height: "16px", borderRadius: "50%", 
+                  background: "#ef4444", color: "white", fontSize: "10px", 
+                  fontWeight: 800, display: "flex", alignItems: "center", 
+                  justifyContent: "center", border: "2px solid var(--db-header-bg)",
+                  zIndex: 10
+                }}>
+                  {notifications.length}
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+              </button>
+
+              {notificationsOpen && (
+                <div className="notification-dropdown">
+                  <div className="notification-header">
+                    <h3>Notifications</h3>
+                    <button 
+                      onClick={() => setNotificationsOpen(false)}
+                      style={{ background: "transparent", border: "none", color: "var(--db-text-muted)", cursor: "pointer", fontSize: "0.75rem", fontWeight: 700 }}>
+                      Mark all as read
+                    </button>
+                  </div>
+                  <div className="notification-list">
+                    {notifications.map((notif) => (
+                      <div key={notif.id} className="notification-item">
+                        <div className="notification-icon" style={{ background: "var(--db-primary-bg)", color: "var(--db-primary)" }}>
+                          {notif.type === 'order' && "🛒"}
+                          {notif.type === 'stock' && "⚠️"}
+                          {notif.type === 'payment' && "💰"}
+                          {notif.type === 'user' && "👤"}
+                          {notif.type === 'report' && "📊"}
+                        </div>
+                        <div className="notification-content">
+                          <p className="notification-title">{notif.title}</p>
+                          <p className="notification-msg">{notif.message}</p>
+                          <p className="notification-time">{notif.time}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ padding: "0.75rem", textAlign: "center", borderTop: "1px solid var(--db-border)" }}>
+                    <Link 
+                      href="/dashboard/notifications"
+                      onClick={() => setNotificationsOpen(false)}
+                      style={{ background: "transparent", border: "none", color: "var(--db-primary)", fontSize: "0.8rem", fontWeight: 700, cursor: "pointer", textDecoration: "none" }}>
+                      View All Notifications
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
+
+            <div className="header-divider" />
+            
+            <Link href="/dashboard/profile" style={{ textDecoration: "none" }}>
+              <div className="header-user">
+                <div className="header-user-info">
+                  <span className="header-user-name">{currentUser.name}</span>
+                  <span style={{ fontSize: "0.65rem", fontWeight: 600, color: "var(--db-text-muted)", textTransform: "uppercase" }}>View Profile</span>
+                </div>
+                <div className="header-user-avatar">{currentUser.avatar}</div>
+              </div>
+            </Link>
           </div>
         </header>
 
