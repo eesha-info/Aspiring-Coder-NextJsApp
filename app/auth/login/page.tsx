@@ -10,16 +10,38 @@ const Login = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
   const handleChange = (e: any) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Clear error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({
+        ...errors,
+        [e.target.name]: "",
+      });
+    }
+  };
+
+  const validateForm = () => {
+    let newErrors: any = {};
+    if (!formData.email.trim()) newErrors.email = "Email is required!";
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid!";
+    if (!formData.password.trim()) newErrors.password = "Password is required!";
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
+    if (validateForm()) {
+      console.log("Login Data:", formData);
+      // Proceed with login logic
+    }
   };
 
   return (
@@ -47,9 +69,11 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="Enter your email"
+                className={errors.email ? "error-input" : ""}
                 value={formData.email}
                 onChange={handleChange}
               />
+              {errors.email && <p className="error-message">{errors.email}</p>}
             </div>
 
             <div className="input-group">
@@ -58,9 +82,11 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder="Enter password"
+                className={errors.password ? "error-input" : ""}
                 value={formData.password}
                 onChange={handleChange}
               />
+              {errors.password && <p className="error-message">{errors.password}</p>}
             </div>
 
             <button type="submit" className="auth-btn">
